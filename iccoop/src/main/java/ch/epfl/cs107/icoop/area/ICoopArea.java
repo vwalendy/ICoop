@@ -6,13 +6,14 @@ import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
 
-public class ICoopArea extends Area {
-    public final static float DEFAULT_SCALE_FACTOR = 13.f;
+public abstract class ICoopArea extends Area {
+    public final static float DEFAULT_SCALE_FACTOR = 20.06f;
     private float cameraScaleFactor = DEFAULT_SCALE_FACTOR;
 
-    protected abstract void createArea();
+    protected abstract void createArea() ;
 
-    public abstract DiscreteCoordinates getPlayerSpawnPosition();
+    public abstract DiscreteCoordinates getBluePlayerSpawnPosition();
+    public abstract DiscreteCoordinates getRedPlayerSpawnPosition();
 
 
     @Override
@@ -24,6 +25,7 @@ public class ICoopArea extends Area {
         }
         return false;
     }
+
 
     /**
      * Getter for Tuto2's scale factor
