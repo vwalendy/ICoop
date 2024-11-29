@@ -4,10 +4,7 @@ import ch.epfl.cs107.icoop.KeyBindings;
 import ch.epfl.cs107.play.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.areagame.area.Area;
 import ch.epfl.cs107.play.areagame.handler.AreaInteractionVisitor;
-import ch.epfl.cs107.play.engine.actor.Background;
-import ch.epfl.cs107.play.engine.actor.OrientedAnimation;
-import ch.epfl.cs107.play.engine.actor.Sprite;
-import ch.epfl.cs107.play.engine.actor.TextGraphics;
+import ch.epfl.cs107.play.engine.actor.*;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.math.Vector;
@@ -34,6 +31,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
     private final static int ANIMATION_DURATION = 4;
     private OrientedAnimation animation;
     private final KeyBindings.PlayerKeyBindings key;
+
 
 
     /**
@@ -118,8 +116,12 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
     private void moveIfPressed(Orientation orientation, Button b) {
         if (b.isDown()) {
             if (!isDisplacementOccurs()) {
-                orientate(orientation);
-                move(MOVE_DURATION);
+            animation.reset();
+            animation.orientate(orientation);
+            orientate(orientation);
+            move(MOVE_DURATION);
+            } else {
+                animation.update(MOVE_DURATION);
             }
         }
     }
