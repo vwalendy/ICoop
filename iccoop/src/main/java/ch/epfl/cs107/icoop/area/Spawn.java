@@ -15,7 +15,6 @@ import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
 
 public class Spawn extends ICoopArea{
 
-
     public String getTitle() {
         return "Spawn";
     }

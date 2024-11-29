@@ -25,6 +25,7 @@ import static ch.epfl.cs107.play.math.Orientation.*;
  */
 public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
 
+
     private final static int MOVE_DURATION = 8;
     private float hp;
     private Element element;

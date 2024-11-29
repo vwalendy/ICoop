@@ -6,6 +6,7 @@ import ch.epfl.cs107.play.areagame.area.AreaBehavior;
 import ch.epfl.cs107.play.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.window.Window;
 
+
 public final class ICoopBehavior extends AreaBehavior {
 
     public ICoopBehavior(Window window, String name) {

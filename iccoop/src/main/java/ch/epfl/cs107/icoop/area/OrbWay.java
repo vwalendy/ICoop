@@ -26,3 +26,4 @@ public class OrbWay extends ICoopArea{
         registerActor(new Foreground(this));
     }
 }
+

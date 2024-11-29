@@ -61,3 +61,4 @@ public final class KeyBindings {
     public record PlayerKeyBindings(int up, int left, int down, int right, int switchItem, int useItem) {
     }
 }
+
