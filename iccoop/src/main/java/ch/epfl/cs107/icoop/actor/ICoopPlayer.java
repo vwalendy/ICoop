@@ -34,7 +34,6 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
     private final static int ANIMATION_DURATION = 4;
     private OrientedAnimation animation;
     private final KeyBindings.PlayerKeyBindings key;
-    private final boolean traversable;
 
 
     /**
@@ -43,7 +42,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
      * @param coordinates (DiscreteCoordinates) the initial position in the grid
      * @param spriteName (String) name of the sprite used as graphical representation
      */
-    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key, boolean traversable) {
+    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key) {
         super(owner, orientation, coordinates);
         this.key = key;
         this.hp = 10;
