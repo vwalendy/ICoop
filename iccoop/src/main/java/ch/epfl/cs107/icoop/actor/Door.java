@@ -5,6 +5,7 @@ import ch.epfl.cs107.play.areagame.actor.Interactable;
 import ch.epfl.cs107.play.areagame.area.Area;
 import ch.epfl.cs107.play.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.signal.logic.Logic;
 
 import java.util.List;
@@ -13,27 +14,34 @@ public class Door extends AreaEntity implements Interactable {
 
     private final String destinationArea;
     private final Logic signal;
-    private DiscreteCoordinates spawnPosition;
+    private final DiscreteCoordinates doorCoords;
 
-    public Door (String destinationArea, Logic signal, DiscreteCoordinates spawnPosition, Area area){
-        super(area);
+    public Door (String destinationArea, Logic signal, DiscreteCoordinates position, Area area, Orientation orientation, DiscreteCoordinates doorCoords){
+        super(area, orientation, position);
 
         this.destinationArea = destinationArea;
         this.signal = signal;
-        this.spawnPosition = spawnPosition;
+        this.doorCoords = doorCoords;
     }
-    boolean takeCellSpace();
 
+    @Override
+    public List<DiscreteCoordinates> getCurrentCells() {
+        return List.of(getCurrentMainCellCoordinates());
+    }
 
-    /**@return (boolean): true if this is able to have cell interactions*/
-    boolean isCellInteractable();
+    @Override
+    public boolean takeCellSpace(){
+        return false;
+    }
 
-    /**@return (boolean): true if this is able to have view interactions*/
-    boolean isViewInteractable();
+    public boolean isCellInteractable(){
+        return true;
+    }
 
-    /** Call directly the interaction on this if accepted
-     * @param v (AreaInteractionVisitor) : the visitor
-     * */
-    void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction);
+    public boolean isViewInteractable(){
+        return false;
+    }
 
+    public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction){
+    }
 }

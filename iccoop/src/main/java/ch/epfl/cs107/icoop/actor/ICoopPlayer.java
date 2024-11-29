@@ -21,7 +21,7 @@ import static ch.epfl.cs107.play.math.Orientation.*;
 /**
  * A ICoopPlayer is a player for the ICoop game.
  */
-public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity {
+public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, Interactor {
 
 
     private final static int MOVE_DURATION = 8;
@@ -101,6 +101,16 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity {
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
         return Collections.singletonList(getCurrentMainCellCoordinates());
+    }
+
+    @Override
+    public List<DiscreteCoordinates> getFieldOfViewCells(){
+        return Collections.singletonList(getCurrentMainCellCoordinates().jump(getOrientation().toVector()));
+    }
+
+    @Override
+    public boolean wantsCellInteraction(){
+        return true;
     }
 
     @Override

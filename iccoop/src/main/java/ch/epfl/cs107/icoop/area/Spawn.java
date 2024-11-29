@@ -1,5 +1,6 @@
 package ch.epfl.cs107.icoop.area;
 
+import ch.epfl.cs107.icoop.actor.Door;
 import ch.epfl.cs107.icoop.actor.Element;
 import ch.epfl.cs107.icoop.actor.ICoopPlayer;
 import ch.epfl.cs107.play.engine.actor.Background;
@@ -7,6 +8,7 @@ import ch.epfl.cs107.play.engine.actor.Foreground;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.math.Vector;
+import ch.epfl.cs107.play.signal.logic.Logic;
 
 import static ch.epfl.cs107.icoop.KeyBindings.BLUE_PLAYER_KEY_BINDINGS;
 import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
@@ -37,6 +39,7 @@ public class Spawn extends ICoopArea{
         registerActor(new Foreground(this));
         registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(13, 6), "icoop/player", Element.Fire, RED_PLAYER_KEY_BINDINGS));
         registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "icoop/player2", Element.Water, BLUE_PLAYER_KEY_BINDINGS));
+        registerActor(new Door("OrbWay", Logic.TRUE, new DiscreteCoordinates(1, 12), this, Orientation.RIGHT, new DiscreteCoordinates(19,15)));
     }
 
 
