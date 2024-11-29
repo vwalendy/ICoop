@@ -28,12 +28,12 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
     private final static int MOVE_DURATION = 8;
     private float hp;
     private Element element;
-    private String prefix;
     final Vector anchor = new Vector(0, 0);
     final Orientation[] orders = {DOWN, RIGHT, UP, LEFT};
     private final static int ANIMATION_DURATION = 4;
     private OrientedAnimation animation;
     private final KeyBindings.PlayerKeyBindings key;
+    private final boolean traversable;
 
 
     /**
@@ -42,7 +42,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
      * @param coordinates (DiscreteCoordinates) the initial position in the grid
      * @param spriteName (String) name of the sprite used as graphical representation
      */
-    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key) {
+    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key, boolean traversable) {
         super(owner, orientation, coordinates);
         this.key = key;
         this.hp = 10;
@@ -151,12 +151,6 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
         return (hp <= 0.f);
     }
 
-    /**
-     * Center the camera on the player
-     */
-    public void centerCamera() {
-        getOwnerArea().setViewCandidate(this);
-    }
 
     /**
      * heals the player

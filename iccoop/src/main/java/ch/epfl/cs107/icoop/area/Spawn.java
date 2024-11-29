@@ -12,6 +12,7 @@ import static ch.epfl.cs107.icoop.KeyBindings.BLUE_PLAYER_KEY_BINDINGS;
 import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
 
 
+
 public class Spawn extends ICoopArea{
 
 

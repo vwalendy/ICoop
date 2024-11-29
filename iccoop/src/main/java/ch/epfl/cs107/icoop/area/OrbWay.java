@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.engine.actor.Background;
 import ch.epfl.cs107.play.engine.actor.Foreground;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 
+
 public class OrbWay extends ICoopArea{
 
     public String getTitle() {
