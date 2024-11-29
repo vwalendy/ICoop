@@ -1,6 +1,7 @@
 package ch.epfl.cs107.icoop.actor;
 
 import ch.epfl.cs107.icoop.KeyBindings;
+import ch.epfl.cs107.icoop.handler.ICoopInteractionVisitor;
 import ch.epfl.cs107.play.areagame.actor.Interactor;
 import ch.epfl.cs107.play.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.areagame.area.Area;
@@ -115,7 +116,13 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
+        ((ICoopInteractionVisitor) v).interactWith(this, isCellInteractable());
+    }
 
+    @Override
+    public boolean wantsViewInteraction(){
+        Keyboard keyboard = getOwnerArea().getKeyboard();
+        return keyboard.get(key.useItem()).isDown();
     }
 
     /**
@@ -170,5 +177,15 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
      */
     public void strengthen() {
         hp = 10;
+    }
+
+    private class ICoopPlayerInteractionHandeler implements ICoopInteractionVisitor{
+
+        public void interactWith(Door door){
+            if (isCellInteractable()){
+                leaveArea();
+                enterArea(Door.getDestinationArea(), Door.getArrivalCoords());
+            }
+        }
     }
 }

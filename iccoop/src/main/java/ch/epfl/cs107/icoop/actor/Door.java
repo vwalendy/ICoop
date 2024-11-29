@@ -1,5 +1,6 @@
 package ch.epfl.cs107.icoop.actor;
 
+import ch.epfl.cs107.icoop.handler.ICoopInteractionVisitor;
 import ch.epfl.cs107.play.areagame.actor.AreaEntity;
 import ch.epfl.cs107.play.areagame.actor.Interactable;
 import ch.epfl.cs107.play.areagame.area.Area;
@@ -15,13 +16,15 @@ public class Door extends AreaEntity implements Interactable {
     private final String destinationArea;
     private final Logic signal;
     private final DiscreteCoordinates doorCoords;
+    private final DiscreteCoordinates arrivalCoords;
 
-    public Door (String destinationArea, Logic signal, DiscreteCoordinates position, Area area, Orientation orientation, DiscreteCoordinates doorCoords){
+    public Door (String destinationArea, Logic signal, DiscreteCoordinates position, Area area, Orientation orientation, DiscreteCoordinates doorCoords, DiscreteCoordinates arrivalCoords){
         super(area, orientation, position);
 
         this.destinationArea = destinationArea;
         this.signal = signal;
         this.doorCoords = doorCoords;
+        this.arrivalCoords = arrivalCoords;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class Door extends AreaEntity implements Interactable {
     }
 
     public boolean isCellInteractable(){
-        return true;
+        return signal.isOn();
     }
 
     public boolean isViewInteractable(){
@@ -43,5 +46,14 @@ public class Door extends AreaEntity implements Interactable {
     }
 
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction){
+        ((ICoopInteractionVisitor) v).interactWith(this, isCellInteraction);
+    }
+
+    public String getDestinationArea(){
+        return destinationArea;
+    }
+
+    public DiscreteCoordinates getArrivalCoords(){
+        return arrivalCoords;
     }
 }
