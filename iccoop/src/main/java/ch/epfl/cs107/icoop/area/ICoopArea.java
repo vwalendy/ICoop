@@ -7,7 +7,7 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
 
 public abstract class ICoopArea extends Area {
-    public final static float DEFAULT_SCALE_FACTOR = 20.06f;
+    public final static float DEFAULT_SCALE_FACTOR = 13.f;
     private float cameraScaleFactor = DEFAULT_SCALE_FACTOR;
 
     protected abstract void createArea() ;
@@ -24,6 +24,11 @@ public abstract class ICoopArea extends Area {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isViewCentered (){
+        return true;
     }
 
 

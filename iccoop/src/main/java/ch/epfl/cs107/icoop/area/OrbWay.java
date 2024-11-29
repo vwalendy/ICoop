@@ -12,12 +12,12 @@ public class OrbWay extends ICoopArea{
 
     @Override
     public DiscreteCoordinates getBluePlayerSpawnPosition() {
-        return new DiscreteCoordinates (14,6);
+        return new DiscreteCoordinates (1,5);
     }
 
     @Override
     public DiscreteCoordinates getRedPlayerSpawnPosition() {
-        return new DiscreteCoordinates (13,6);
+        return new DiscreteCoordinates (1,12);
     }
 
     protected void createArea() {

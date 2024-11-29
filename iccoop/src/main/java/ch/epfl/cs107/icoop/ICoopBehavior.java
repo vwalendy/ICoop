@@ -37,12 +37,12 @@ public final class ICoopBehavior extends AreaBehavior {
         ;
 
         final int type;
-        final boolean isWalkable;
+        final boolean canWalk;
         final boolean canFly;
 
-        Tuto2CellType(int type, boolean isWalkable, boolean canFly) {
+        Tuto2CellType(int type, boolean canWalk, boolean canFly) {
             this.type = type;
-            this.isWalkable = isWalkable;
+            this.canWalk = canWalk;
             this.canFly = canFly;
         }
 
@@ -83,7 +83,7 @@ public final class ICoopBehavior extends AreaBehavior {
 
         @Override
         protected boolean canEnter(Interactable entity) {
-            if (takeCellSpace()&&type.isWalkable){
+            if (takeCellSpace()&&type.canWalk){
                 return true;
             }
             return false;

@@ -1,5 +1,6 @@
 package ch.epfl.cs107.icoop.area;
 
+import ch.epfl.cs107.icoop.actor.Element;
 import ch.epfl.cs107.icoop.actor.ICoopPlayer;
 import ch.epfl.cs107.play.engine.actor.Background;
 import ch.epfl.cs107.play.engine.actor.Foreground;
@@ -19,12 +20,12 @@ public class Spawn extends ICoopArea{
 
     @Override
     public DiscreteCoordinates getBluePlayerSpawnPosition() {
-        return new DiscreteCoordinates (10,10);
+        return new DiscreteCoordinates (14,6);
     }
 
     @Override
     public DiscreteCoordinates getRedPlayerSpawnPosition() {
-        return new DiscreteCoordinates (8,8);
+        return new DiscreteCoordinates (13,6);
     }
 
 
@@ -33,8 +34,8 @@ public class Spawn extends ICoopArea{
     protected void createArea() {
         registerActor(new Background(this));
         registerActor(new Foreground(this));
-        registerActor(new ICoopPlayer(this, Orientation.UP, new DiscreteCoordinates(13, 6), "Red"));
-        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "Blue"));
+        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(13, 6), "icoop/player", Element.Fire));
+        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "icoop/player2", Element.Water));
     }
 
 

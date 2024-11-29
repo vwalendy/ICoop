@@ -1,6 +1,7 @@
 package ch.epfl.cs107.icoop;
 
 
+import ch.epfl.cs107.icoop.actor.Element;
 import ch.epfl.cs107.icoop.actor.ICoopPlayer;
 import ch.epfl.cs107.icoop.area.ICoopArea;
 import ch.epfl.cs107.icoop.area.OrbWay;
@@ -15,7 +16,8 @@ import ch.epfl.cs107.play.window.Window;
 public class ICoop extends AreaGame {
 
     private final String[] areas = {"Spawn","OrbWay"};
-    private ICoopPlayer player;
+    private ICoopPlayer player1;
+    private ICoopPlayer player2;
     private int areaIndex;
 
 
@@ -33,10 +35,15 @@ public class ICoop extends AreaGame {
         return false;
     }
     public void update(float deltaTime) {
-        if (player.isWeak())
+        if (player1.isWeak())
+            switchArea();
+        super.update(deltaTime);
+        if (player2.isWeak())
             switchArea();
         super.update(deltaTime);
     }
+
+
 
     @Override
     public void end() {
@@ -50,11 +57,10 @@ public class ICoop extends AreaGame {
         ICoopArea area = (ICoopArea) setCurrentArea(areaKey, true);
         DiscreteCoordinates coords1 = area.getRedPlayerSpawnPosition();
         DiscreteCoordinates coords2 = area.getBluePlayerSpawnPosition();
-        player = new ICoopPlayer(area, Orientation.DOWN, coords1, "Red");
-        player = new ICoopPlayer(area,Orientation.DOWN, coords2, "Blue");
-        player.enterArea(area, coords1);
-        player.enterArea(area, coords2);
-        player.centerCamera();
+        player1 = new ICoopPlayer(area, Orientation.DOWN, coords1, "icoop/player", Element.Fire);
+        player2 = new ICoopPlayer(area,Orientation.DOWN, coords2, "icoop/player2", Element.Water);
+        player1.enterArea(area, coords1);
+        player2.enterArea(area, coords2);
     }
 
     /**
@@ -62,12 +68,14 @@ public class ICoop extends AreaGame {
      * the player is healed when moving to a new area
      */
     private void switchArea() {
-        player.leaveArea();
+        player1.leaveArea();
+        player2.leaveArea();
         areaIndex = (areaIndex == 0) ? 1 : 0;
         ICoopArea currentArea = (ICoopArea) setCurrentArea(areas[areaIndex], false);
-        player.enterArea(currentArea, currentArea.getBluePlayerSpawnPosition());
-        player.enterArea(currentArea, currentArea.getRedPlayerSpawnPosition());
-        player.strengthen();
+        player1.enterArea(currentArea, currentArea.getRedPlayerSpawnPosition());
+        player2.enterArea(currentArea, currentArea.getBluePlayerSpawnPosition());
+        player1.strengthen();
+        player2.strengthen();
     }
 
 
