@@ -8,7 +8,8 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.math.Vector;
 
-
+import static ch.epfl.cs107.icoop.KeyBindings.BLUE_PLAYER_KEY_BINDINGS;
+import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
 
 
 public class Spawn extends ICoopArea{
@@ -34,8 +35,8 @@ public class Spawn extends ICoopArea{
     protected void createArea() {
         registerActor(new Background(this));
         registerActor(new Foreground(this));
-        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(13, 6), "icoop/player", Element.Fire));
-        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "icoop/player2", Element.Water));
+        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(13, 6), "icoop/player", Element.Fire, RED_PLAYER_KEY_BINDINGS));
+        registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "icoop/player2", Element.Water, BLUE_PLAYER_KEY_BINDINGS));
     }
 
 

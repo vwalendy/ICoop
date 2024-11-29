@@ -12,6 +12,9 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.window.Window;
 
+import static ch.epfl.cs107.icoop.KeyBindings.BLUE_PLAYER_KEY_BINDINGS;
+import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
+
 
 public class ICoop extends AreaGame {
 
@@ -57,8 +60,8 @@ public class ICoop extends AreaGame {
         ICoopArea area = (ICoopArea) setCurrentArea(areaKey, true);
         DiscreteCoordinates coords1 = area.getRedPlayerSpawnPosition();
         DiscreteCoordinates coords2 = area.getBluePlayerSpawnPosition();
-        player1 = new ICoopPlayer(area, Orientation.DOWN, coords1, "icoop/player", Element.Fire);
-        player2 = new ICoopPlayer(area,Orientation.DOWN, coords2, "icoop/player2", Element.Water);
+        player1 = new ICoopPlayer(area, Orientation.DOWN, coords1, "icoop/player", Element.Fire, RED_PLAYER_KEY_BINDINGS);
+        player2 = new ICoopPlayer(area,Orientation.DOWN, coords2, "icoop/player2", Element.Water, BLUE_PLAYER_KEY_BINDINGS);
         player1.enterArea(area, coords1);
         player2.enterArea(area, coords2);
     }

@@ -1,5 +1,6 @@
 package ch.epfl.cs107.icoop.actor;
 
+import ch.epfl.cs107.icoop.KeyBindings;
 import ch.epfl.cs107.play.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.areagame.area.Area;
 import ch.epfl.cs107.play.areagame.handler.AreaInteractionVisitor;
@@ -32,6 +33,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
     final Orientation[] orders = {DOWN, RIGHT, UP, LEFT};
     private final static int ANIMATION_DURATION = 4;
     private OrientedAnimation animation;
+    private final KeyBindings.PlayerKeyBindings key;
 
 
     /**
@@ -40,8 +42,9 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
      * @param coordinates (DiscreteCoordinates) the initial position in the grid
      * @param spriteName (String) name of the sprite used as graphical representation
      */
-    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element) {
+    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key) {
         super(owner, orientation, coordinates);
+        this.key = key;
         this.hp = 10;
         this.element = element;
         resetMotion();
@@ -65,12 +68,12 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity{
         //            message.setText(Integer.toString((int) hp));
         //        }
         //        if (hp < 0) hp = 0.f;
-        //        Keyboard keyboard = getOwnerArea().getKeyboard();
-        //        moveIfPressed(Orientation.LEFT, keyboard.get(Keyboard.LEFT));
-        //        moveIfPressed(UP, keyboard.get(Keyboard.UP));
-        //        moveIfPressed(RIGHT, keyboard.get(Keyboard.RIGHT));
-        //        moveIfPressed(DOWN, keyboard.get(Keyboard.DOWN));
-        //        super.update(deltaTime);
+                Keyboard keyboard = getOwnerArea().getKeyboard();
+                moveIfPressed(Orientation.LEFT, keyboard.get(key.left()));
+                moveIfPressed(UP, keyboard.get(key.up()));
+                moveIfPressed(RIGHT, keyboard.get(key.right()));
+                moveIfPressed(DOWN, keyboard.get(key.down()));
+                super.update(deltaTime);
     }
 
     /**
