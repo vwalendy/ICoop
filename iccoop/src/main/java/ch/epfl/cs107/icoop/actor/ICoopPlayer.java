@@ -12,6 +12,7 @@ import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Keyboard;
+import ch.epfl.cs107.play.areagame.actor.Interactable;
 
 import java.awt.*;
 import java.util.Collections;
@@ -35,26 +36,25 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
     private final KeyBindings.PlayerKeyBindings key;
 
 
-
     /**
-     * @param owner (Area) area to which the player belong
+     * @param owner       (Area) area to which the player belong
      * @param orientation (Orientation) the initial orientation of the player
      * @param coordinates (DiscreteCoordinates) the initial position in the grid
-     * @param spriteName (String) name of the sprite used as graphical representation
+     * @param spriteName  (String) name of the sprite used as graphical representation
      */
-    public ICoopPlayer (Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key) {
+    public ICoopPlayer(Area owner, Orientation orientation, DiscreteCoordinates coordinates, String spriteName, Element element, KeyBindings.PlayerKeyBindings key) {
         super(owner, orientation, coordinates);
         this.key = key;
         this.hp = 10;
         this.element = element;
         resetMotion();
-        animation = new OrientedAnimation(spriteName, ANIMATION_DURATION, this, anchor , orders , 4, 1, 2, 16, 32,
+        animation = new OrientedAnimation(spriteName, ANIMATION_DURATION, this, anchor, orders, 4, 1, 2, 16, 32,
                 true);
 
     }
 
     @Override
-    public Element element (){
+    public Element element() {
         return element;
     }
 
@@ -63,17 +63,12 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
      */
     @Override
     public void update(float deltaTime) {
-       // if (hp > 0) {
-        //            hp -= deltaTime;
-        //            message.setText(Integer.toString((int) hp));
-        //        }
-        //        if (hp < 0) hp = 0.f;
-                Keyboard keyboard = getOwnerArea().getKeyboard();
-                moveIfPressed(Orientation.LEFT, keyboard.get(key.left()));
-                moveIfPressed(UP, keyboard.get(key.up()));
-                moveIfPressed(RIGHT, keyboard.get(key.right()));
-                moveIfPressed(DOWN, keyboard.get(key.down()));
-                super.update(deltaTime);
+        Keyboard keyboard = getOwnerArea().getKeyboard();
+        moveIfPressed(Orientation.LEFT, keyboard.get(key.left()));
+        moveIfPressed(UP, keyboard.get(key.up()));
+        moveIfPressed(RIGHT, keyboard.get(key.right()));
+        moveIfPressed(DOWN, keyboard.get(key.down()));
+        super.update(deltaTime);
     }
 
     /**
@@ -105,22 +100,24 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
     }
 
     @Override
-    public List<DiscreteCoordinates> getFieldOfViewCells(){
+    public List<DiscreteCoordinates> getFieldOfViewCells() {
         return Collections.singletonList(getCurrentMainCellCoordinates().jump(getOrientation().toVector()));
     }
 
     @Override
-    public boolean wantsCellInteraction(){
+    public boolean wantsCellInteraction() {
         return true;
     }
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
-        ((ICoopInteractionVisitor) v).interactWith(this, isCellInteractable());
+        if (v instanceof ICoopInteractionVisitor) {
+            ((ICoopInteractionVisitor) v).interactWith(this);
+        }
     }
 
     @Override
-    public boolean wantsViewInteraction(){
+    public boolean wantsViewInteraction() {
         Keyboard keyboard = getOwnerArea().getKeyboard();
         return keyboard.get(key.useItem()).isDown();
     }
@@ -134,10 +131,10 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
     private void moveIfPressed(Orientation orientation, Button b) {
         if (b.isDown()) {
             if (!isDisplacementOccurs()) {
-            animation.reset();
-            animation.orientate(orientation);
-            orientate(orientation);
-            move(MOVE_DURATION);
+                animation.reset();
+                animation.orientate(orientation);
+                orientate(orientation);
+                move(MOVE_DURATION);
             } else {
                 animation.update(MOVE_DURATION);
             }
@@ -153,6 +150,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
 
     /**
      * makes the player entering a given area
+     *
      * @param area     (Area):  the area to be entered, not null
      * @param position (DiscreteCoordinates): initial position in the entered area, not null
      */
@@ -179,13 +177,15 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
         hp = 10;
     }
 
-    private class ICoopPlayerInteractionHandeler implements ICoopInteractionVisitor{
+    //public class ICoopPlayerInteractionHandeler implements ICoopInteractionVisitor {
 
-        public void interactWith(Door door){
-            if (isCellInteractable()){
-                leaveArea();
-                enterArea(Door.getDestinationArea(), Door.getArrivalCoords());
+        @Override
+        public void interactWith(Interactable other, boolean isCellInteraction) {
+            if (other instanceof Door door) {
+                if (door.isCellInteractable() && door.getSignal().isOn()) {
+                    leaveArea();
+                    enterArea(door.getDestinationArea(), door.getArrivalCoords());
+                }
             }
         }
     }
-}

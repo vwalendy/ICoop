@@ -13,17 +13,17 @@ import java.util.List;
 
 public class Door extends AreaEntity implements Interactable {
 
-    private final String destinationArea;
+    private final Area destinationArea;
     private final Logic signal;
-    private final DiscreteCoordinates doorCoords;
+
     private final DiscreteCoordinates arrivalCoords;
 
-    public Door (String destinationArea, Logic signal, DiscreteCoordinates position, Area area, Orientation orientation, DiscreteCoordinates doorCoords, DiscreteCoordinates arrivalCoords){
+    public Door (Area destinationArea, Logic signal, DiscreteCoordinates position, Area area, Orientation orientation, DiscreteCoordinates arrivalCoords){
         super(area, orientation, position);
 
         this.destinationArea = destinationArea;
         this.signal = signal;
-        this.doorCoords = doorCoords;
+
         this.arrivalCoords = arrivalCoords;
     }
 
@@ -46,14 +46,20 @@ public class Door extends AreaEntity implements Interactable {
     }
 
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction){
-        ((ICoopInteractionVisitor) v).interactWith(this, isCellInteraction);
+        if (v instanceof ICoopInteractionVisitor) {
+            ((ICoopInteractionVisitor) v).interactWith(this);
+        }
     }
 
-    public String getDestinationArea(){
+    public Area getDestinationArea(){
         return destinationArea;
     }
 
     public DiscreteCoordinates getArrivalCoords(){
         return arrivalCoords;
+    }
+
+    public Logic getSignal() {
+        return signal;
     }
 }

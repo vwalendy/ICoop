@@ -3,6 +3,7 @@ package ch.epfl.cs107.icoop.area;
 import ch.epfl.cs107.icoop.actor.Door;
 import ch.epfl.cs107.icoop.actor.Element;
 import ch.epfl.cs107.icoop.actor.ICoopPlayer;
+import ch.epfl.cs107.play.areagame.area.Area;
 import ch.epfl.cs107.play.engine.actor.Background;
 import ch.epfl.cs107.play.engine.actor.Foreground;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -15,32 +16,33 @@ import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
 
 
 
-public class Spawn extends ICoopArea{
+public class Spawn extends ICoopArea {
+
+
 
     public String getTitle() {
         return "Spawn";
     }
 
+    public static Area getAreaS() {
+        return new Spawn();
+    }
+
     @Override
     public DiscreteCoordinates getBluePlayerSpawnPosition() {
-        return new DiscreteCoordinates (14,6);
+        return new DiscreteCoordinates(14, 6);
     }
 
     @Override
     public DiscreteCoordinates getRedPlayerSpawnPosition() {
-        return new DiscreteCoordinates (13,6);
+        return new DiscreteCoordinates(13, 6);
     }
-
-
-
 
     protected void createArea() {
         registerActor(new Background(this));
         registerActor(new Foreground(this));
         registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(13, 6), "icoop/player", Element.Fire, RED_PLAYER_KEY_BINDINGS));
         registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "icoop/player2", Element.Water, BLUE_PLAYER_KEY_BINDINGS));
-        registerActor(new Door("OrbWay", Logic.TRUE, new DiscreteCoordinates(1, 12), this, Orientation.RIGHT, new DiscreteCoordinates(19,15)));
+        registerActor(new Door(OrbWay.getAreaOW(), Logic.TRUE, new DiscreteCoordinates(19, 16), this, Orientation.RIGHT, new DiscreteCoordinates(1, 12)));
     }
-
-
 }
