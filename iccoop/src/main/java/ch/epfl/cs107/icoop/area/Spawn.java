@@ -11,6 +11,9 @@ import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.signal.logic.Logic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static ch.epfl.cs107.icoop.KeyBindings.BLUE_PLAYER_KEY_BINDINGS;
 import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
 
@@ -18,14 +21,12 @@ import static ch.epfl.cs107.icoop.KeyBindings.RED_PLAYER_KEY_BINDINGS;
 
 public class Spawn extends ICoopArea {
 
-
-
     public String getTitle() {
         return "Spawn";
     }
 
-    public static Area getAreaS() {
-        return new Spawn();
+    public Spawn (){
+        super("Spawn");
     }
 
     @Override
@@ -39,10 +40,14 @@ public class Spawn extends ICoopArea {
     }
 
     protected void createArea() {
+        ArrayList<DiscreteCoordinates> coords = new ArrayList<>();
+        coords.add(new DiscreteCoordinates(15, 6));
+
+
         registerActor(new Background(this));
         registerActor(new Foreground(this));
         registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(13, 6), "icoop/player", Element.Fire, RED_PLAYER_KEY_BINDINGS));
         registerActor(new ICoopPlayer(this, Orientation.DOWN, new DiscreteCoordinates(14, 6), "icoop/player2", Element.Water, BLUE_PLAYER_KEY_BINDINGS));
-        registerActor(new Door(OrbWay.getAreaOW(), Logic.TRUE, new DiscreteCoordinates(19, 16), this, Orientation.RIGHT, new DiscreteCoordinates(1, 12)));
+        registerActor(new Door(this, new DiscreteCoordinates(19, 15), "OrbWay", Logic.TRUE, new ArrayList<>(Arrays.asList(new DiscreteCoordinates(19, 16))), new DiscreteCoordinates(1, 12), new DiscreteCoordinates(1, 5)));
     }
 }

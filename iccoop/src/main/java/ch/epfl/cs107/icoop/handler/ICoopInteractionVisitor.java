@@ -12,12 +12,12 @@ import ch.epfl.cs107.play.areagame.handler.AreaInteractionVisitor;
 public interface ICoopInteractionVisitor extends AreaInteractionVisitor {
     /// Add Interaction method with all non Abstract Interactable
 
-    default void interactWith(ICoopBehavior.ICoopCell cell){
+    default void interactWith(ICoopBehavior.ICoopCell cell, boolean isCellInteraction){
     }
 
-    default void interactWith(ICoopPlayer player){
+    default void interactWith(ICoopPlayer player, boolean isCellInteraction){
     }
 
-    default void interactWith(Door door) {
+    default void interactWith(Door door, boolean isCellInteraction) {
     }
 }

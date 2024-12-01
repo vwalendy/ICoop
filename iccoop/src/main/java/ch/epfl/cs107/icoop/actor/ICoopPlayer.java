@@ -1,5 +1,6 @@
 package ch.epfl.cs107.icoop.actor;
 
+import ch.epfl.cs107.icoop.ICoop;
 import ch.epfl.cs107.icoop.KeyBindings;
 import ch.epfl.cs107.icoop.handler.ICoopInteractionVisitor;
 import ch.epfl.cs107.play.areagame.actor.Interactor;
@@ -14,7 +15,6 @@ import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Keyboard;
 import ch.epfl.cs107.play.areagame.actor.Interactable;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +34,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
     private final static int ANIMATION_DURATION = 4;
     private OrientedAnimation animation;
     private final KeyBindings.PlayerKeyBindings key;
+    private ICoopPlayerInteractionHandeler handler;
 
 
     /**
@@ -47,6 +48,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
         this.key = key;
         this.hp = 10;
         this.element = element;
+        this.handler = new ICoopPlayerInteractionHandeler();
         resetMotion();
         animation = new OrientedAnimation(spriteName, ANIMATION_DURATION, this, anchor, orders, 4, 1, 2, 16, 32,
                 true);
@@ -111,9 +113,7 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
-        if (v instanceof ICoopInteractionVisitor) {
-            ((ICoopInteractionVisitor) v).interactWith(this);
-        }
+            ((ICoopInteractionVisitor) v).interactWith(this, isCellInteraction);
     }
 
     @Override
@@ -177,15 +177,29 @@ public class ICoopPlayer extends MovableAreaEntity implements ElementalEntity, I
         hp = 10;
     }
 
-    //public class ICoopPlayerInteractionHandeler implements ICoopInteractionVisitor {
+    @Override
+    public void interactWith(Interactable other, boolean isCellInteraction){
+        other.acceptInteraction(handler, isCellInteraction);
+    }
+
+    public class ICoopPlayerInteractionHandeler implements ICoopInteractionVisitor {
 
         @Override
         public void interactWith(Interactable other, boolean isCellInteraction) {
             if (other instanceof Door door) {
                 if (door.isCellInteractable() && door.getSignal().isOn()) {
-                    leaveArea();
-                    enterArea(door.getDestinationArea(), door.getArrivalCoords());
+                    String targetArea = door.getTransit();
+                    DiscreteCoordinates[] targetPositions = door.getDestination();
+
+                    if (targetArea != null && targetPositions.length > 0) {
+                        leaveArea();
+
+                        Area newArea = ICoop.getArea(targetArea);
+                        DiscreteCoordinates newPosition = targetPositions[0];
+                        enterArea(newArea, newPosition);
+                    }
                 }
             }
         }
     }
+}

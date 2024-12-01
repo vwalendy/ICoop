@@ -9,6 +9,11 @@ import ch.epfl.cs107.play.window.Window;
 public abstract class ICoopArea extends Area {
     public final static float DEFAULT_SCALE_FACTOR = 13.f;
     private float cameraScaleFactor = DEFAULT_SCALE_FACTOR;
+    private String name;
+
+    public ICoopArea (String name){
+        this.name = name;
+    }
 
     protected abstract void createArea() ;
 

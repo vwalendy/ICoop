@@ -9,27 +9,64 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.signal.logic.Logic;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DeflaterInputStream;
 
 public class Door extends AreaEntity implements Interactable {
 
-    private final Area destinationArea;
-    private final Logic signal;
+    private Area area;
+    private Logic signal;
+    private DiscreteCoordinates position;
+    private String transit;
+    private DiscreteCoordinates [] destination = new DiscreteCoordinates[2];
+    private ArrayList<DiscreteCoordinates> plan = new ArrayList<>();
 
-    private final DiscreteCoordinates arrivalCoords;
 
-    public Door (Area destinationArea, Logic signal, DiscreteCoordinates position, Area area, Orientation orientation, DiscreteCoordinates arrivalCoords){
-        super(area, orientation, position);
+    public Door (Area area, DiscreteCoordinates position, String transit, Logic signal, DiscreteCoordinates coords1, DiscreteCoordinates coords2, DiscreteCoordinates coords3){
+        super(area, Orientation.DOWN, position);
 
-        this.destinationArea = destinationArea;
+        this.transit = transit;
         this.signal = signal;
+        this.area = area;
 
-        this.arrivalCoords = arrivalCoords;
+        for(int i = 0; i < destination.length; i++){
+            this.destination[i] = destination [i];
+        }
+    }
+
+    public Door (Area area, DiscreteCoordinates position, String transit, Logic signal, ArrayList<DiscreteCoordinates> coords1, DiscreteCoordinates coords2, DiscreteCoordinates coords3){
+        super(area, Orientation.DOWN, position);
+
+        this.transit = transit;
+        this.signal = signal;
+        this.area = area;
+
+        for(int i = 0; i < destination.length; i++){
+            this.destination[i] = destination [i];
+        }
+
+        for(int i = 0; i < plan.size(); i++){
+            this.plan.add(plan.get(i));
+        }
+        this.plan.add(position);
+    }
+
+    public DiscreteCoordinates[] getDestination() {
+        return destination;
+    }
+
+    public String getTransit(){
+        return transit;
+    }
+
+    public Area getArea(){
+        return area;
     }
 
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
-        return List.of(getCurrentMainCellCoordinates());
+        return plan;
     }
 
     @Override
@@ -46,17 +83,7 @@ public class Door extends AreaEntity implements Interactable {
     }
 
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction){
-        if (v instanceof ICoopInteractionVisitor) {
-            ((ICoopInteractionVisitor) v).interactWith(this);
-        }
-    }
-
-    public Area getDestinationArea(){
-        return destinationArea;
-    }
-
-    public DiscreteCoordinates getArrivalCoords(){
-        return arrivalCoords;
+        ((ICoopInteractionVisitor) v).interactWith(this, isCellInteraction);
     }
 
     public Logic getSignal() {
