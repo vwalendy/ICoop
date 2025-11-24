@@ -9,21 +9,54 @@ import ch.epfl.cs107.play.io.ResourcePath;
 import ch.epfl.cs107.play.window.Window;
 import ch.epfl.cs107.play.window.swing.SwingWindow;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+
 /**
  * Main entry point.
  */
 public class Play {
 
+	public static void jouerMusiqueDeFond() {
+		try {
+			// Charger le fichier audio depuis les ressources
+			URL resource = Play.class.getClassLoader().getResource("music/song.wav");
+
+			if (resource == null) {
+				throw new FileNotFoundException("Le fichier audio n'a pas été trouvé dans le répertoire resources");
+			}
+
+			File audioFile = new File(resource.toURI());
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+
+			// Démarre la lecture de la musique de fond en boucle
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			clip.start();
+			System.out.println("Musique de fond lancée !");
+		} catch (Exception e) {
+			System.out.println("Erreur lors de la lecture de la musique : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	/** One second in nano second */
     private static final float ONE_SEC = 1E9f;
-	public static final int WINDOW_HEIGHT = 550;
-	public static final int WINDOW_WIDTH = 550;
+	public static final int WINDOW_HEIGHT = 800;
+	public static final int WINDOW_WIDTH = 800;
 
 	/**
 	 * Main entry point.
 	 * @param args (Array of String): ignored
 	 */
 	public static void main(String[] args) {
+		//jouerMusiqueDeFond();
 		// Define cascading file system
 		final FileSystem fileSystem = new ResourceFileSystem(DefaultFileSystem.INSTANCE);
 

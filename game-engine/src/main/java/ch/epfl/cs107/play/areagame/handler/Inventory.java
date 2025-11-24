@@ -106,7 +106,8 @@ public abstract class Inventory {
         boolean possess(InventoryItem item);
     }
 
-    public interface GUI {
+    public interface
+    GUI {
 
         /**
          * Indicate Listeners a pocket has been updated

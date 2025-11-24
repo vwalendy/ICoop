@@ -14,14 +14,26 @@ import ch.epfl.cs107.play.window.Canvas;
 public class ICoopPlayerStatusGUI implements Graphics {
 
     private final static int DEPTH = 2000;
+
     private final ICoopPlayer player;
     private final boolean flipped;
 
+    /**
+     *
+     * @param player
+     * @param flipped
+     * permet la création d'une instance de la class
+     */
     public ICoopPlayerStatusGUI(ICoopPlayer player, boolean flipped) {
         this.player = player;
         this.flipped = flipped;
     }
 
+    /**
+     *
+     * @param canvas target, not null
+     * permet de dessiner les ronds en haut a gauche et a droite
+     */
     @Override
     public void draw(Canvas canvas) {
         // Compute width, height and anchor
@@ -39,5 +51,11 @@ public class ICoopPlayerStatusGUI implements Graphics {
         //Draw selected gear
         ImageGraphics gearDisplay = new ImageGraphics(ResourcePath.getSprite("icoop/gearDisplay"), 1.5f, 1.5f, new RegionOfInterest(0, 0, 32, 32), anchor.add(new Vector(0, height - 1.75f)), 1, DEPTH);
         gearDisplay.draw(canvas);
+
+        if (player.getCurrentItem() != null) {
+            String sprite_name = player.getCurrentItem().getName();
+            ImageGraphics inventory = new ImageGraphics(ResourcePath.getSprite(sprite_name), 0.5f, 0.5f, new RegionOfInterest(0, 0, 16, 16), anchor.add(new Vector(0.5f, height - 1.25f)), 1, DEPTH);
+            inventory.draw(canvas);
+        }
     }
 }

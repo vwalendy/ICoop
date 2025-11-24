@@ -124,4 +124,13 @@ public class Health implements Graphics, Logic {
     public void resetHealth() {
         healthPoints = maxHealth;
     }
+
+    public int getHealthPoints(){
+        return this.healthPoints;
+    }
+
+    public void setHealth0(){
+        healthPoints=0;
+    }
+
 }

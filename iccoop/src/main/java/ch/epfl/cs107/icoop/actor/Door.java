@@ -1,72 +1,95 @@
 package ch.epfl.cs107.icoop.actor;
 
+
 import ch.epfl.cs107.icoop.handler.ICoopInteractionVisitor;
 import ch.epfl.cs107.play.areagame.actor.AreaEntity;
-import ch.epfl.cs107.play.areagame.actor.Interactable;
+import ch.epfl.cs107.play.areagame.actor.Interactor;
 import ch.epfl.cs107.play.areagame.area.Area;
 import ch.epfl.cs107.play.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Orientation;
 import ch.epfl.cs107.play.signal.logic.Logic;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.DeflaterInputStream;
 
-public class Door extends AreaEntity implements Interactable {
+public class Door extends AreaEntity {
 
-    private Area area;
     private Logic signal;
-    private DiscreteCoordinates position;
+    private DiscreteCoordinates[] coordinates;
     private String transit;
-    private DiscreteCoordinates [] destination = new DiscreteCoordinates[2];
-    private ArrayList<DiscreteCoordinates> plan = new ArrayList<>();
+    private List<DiscreteCoordinates> otherCell;
+    private Key keyFire;
+    private Key keyWater;
 
-
-    public Door (Area area, DiscreteCoordinates position, String transit, Logic signal, DiscreteCoordinates coords1, DiscreteCoordinates coords2, DiscreteCoordinates coords3){
-        super(area, Orientation.DOWN, position);
+    /**
+     *
+     * @param area
+     * @param orientation
+     * @param cellPrincipale
+     * @param transit
+     * @param signal
+     * @param coordinates
+     * @param otherCell
+     * la porte depend d''un signal Logic qui dans le cas le plus courrant est TRUE, ca veut dire qu'on peut y acceder sans avoir besoin de clef
+     */
+    public Door (Area area, Orientation orientation, DiscreteCoordinates cellPrincipale, String transit, Logic signal, DiscreteCoordinates[] coordinates, List<DiscreteCoordinates> otherCell) {
+        super(area, orientation, cellPrincipale);
 
         this.transit = transit;
         this.signal = signal;
-        this.area = area;
-
-        for(int i = 0; i < destination.length; i++){
-            this.destination[i] = destination [i];
-        }
+        this.coordinates = coordinates;
+        this.otherCell = otherCell;
     }
 
-    public Door (Area area, DiscreteCoordinates position, String transit, Logic signal, ArrayList<DiscreteCoordinates> coords1, DiscreteCoordinates coords2, DiscreteCoordinates coords3){
-        super(area, Orientation.DOWN, position);
+    /**
+     * Cette deuxieme porte prend deux parametre en plus qui sont les clefs, c'est une porte accessible seulement lorsque les deux joueurs ont collecte leur clef
+     * @param area
+     * @param orientation
+     * @param cellPrincipale
+     * @param transit
+     * @param keyFire
+     * @param keyWater
+     * @param coordinates
+     */
+
+    public Door(Area area, Orientation orientation, DiscreteCoordinates cellPrincipale, String transit, Key keyFire, Key keyWater, DiscreteCoordinates[] coordinates) {
+        super(area, orientation, cellPrincipale);
 
         this.transit = transit;
-        this.signal = signal;
-        this.area = area;
-
-        for(int i = 0; i < destination.length; i++){
-            this.destination[i] = destination [i];
-        }
-
-        for(int i = 0; i < plan.size(); i++){
-            this.plan.add(plan.get(i));
-        }
-        this.plan.add(position);
+        this.keyFire = keyFire;
+        this.keyWater = keyWater;
+        this.coordinates = coordinates;
+        this.otherCell = cellPrincipale.getNeighbours();
     }
 
-    public DiscreteCoordinates[] getDestination() {
-        return destination;
+
+    public void update(float deltaTime){
+        if (keyFire != null && keyWater != null) {
+            signal = (keyFire.isCollected() && keyWater.isCollected()) ? Logic.TRUE : Logic.FALSE;
+        }
+
+        super.update(deltaTime);
     }
+
+    /**
+     * transiif est l'aire vers laquelle nos joueurs vont etre deplace
+     * Lorsque l'on construit la porte dans une map, on doit alors a chaque fois lui indiquer vers quelle aire elle transit
+     * @return
+     */
 
     public String getTransit(){
         return transit;
     }
 
-    public Area getArea(){
-        return area;
+    public DiscreteCoordinates[] getCoordinates(){
+        return coordinates;
     }
 
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
-        return plan;
+        List<DiscreteCoordinates> allCells = new ArrayList<>(otherCell);
+        allCells.add(getCurrentMainCellCoordinates());
+        return allCells;
     }
 
     @Override
@@ -74,19 +97,32 @@ public class Door extends AreaEntity implements Interactable {
         return false;
     }
 
+    @Override
     public boolean isCellInteractable(){
-        return signal.isOn();
+        return true;
     }
 
+    @Override
     public boolean isViewInteractable(){
         return false;
     }
 
-    public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction){
-        ((ICoopInteractionVisitor) v).interactWith(this, isCellInteraction);
+    @Override
+    public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
+        if (signal != null && signal.isOn()) {
+            ((ICoopInteractionVisitor) v).interactWith(this, isCellInteraction);
+        }
     }
 
-    public Logic getSignal() {
-        return signal;
-    }
+   // private class DoorInteractionHandler implements ICoopInteractionVisitor{
+    //
+    //        @Override
+    //        public void interactWith(ICoopPlayer player, boolean isCellInteraction){
+    //            if (player.getCurrentMainCellCoordinates().equals(new DiscreteCoordinates(6, 11))){
+    //                if (signal.isOn()){
+    //                    player.hasKey();
+    //                }
+    //            }
+    //        }
+    //    }
 }
