@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# IntelliJ / IDEA
+.idea/
+*.iml
+out/
+
+# Java / build
+target/
+build/
+*.class
+
+# Logs
+*.log
+
+# OS divers
+Thumbs.db
+
